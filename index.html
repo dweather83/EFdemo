@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Demo</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Developer Demo</h1>
+    <form id="consumer_session_form">
+        <div class="form-group">
+            <label for="consumer_session_token">Consumer Session Token</label>
+            <input type="text" class="form-control" id="consumer_session_token"
+                   placeholder="Enter the JWT token obtained when creating or authenticating the consumer"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div class="mb-5 p-3">
+        <ul id="output"></ul>
+    </div>
+    <div id="_yri_root"></div>
+</div>
+<script type="text/javascript">
+    // // DEMO only!! =>
+    // //  Fetching the loader script url directly from sandbox so it is always
+    // //  using the latest version.
+    // //
+    // // For non-DEMO applications =>
+    // //  please use the loader script url and version provided by DevOps.
+    // //
+    var sandbox_url = "https://sandbox-embeddedrails.riskinsight.yodlee.com/";
+    fetch(sandbox_url).then(function (response) {
+        if (response.ok) {
+            return response.text();
+        }
+        throw new Error('Network response was not ok.');
+    }).then(function (text) {
+        var loader_url = text.split("<pre>")[1].split("</pre>")[0];
+
+
+
+
+
+        // Loader
+        (function (w, d, t, p, r) {
+            w[r] = w[r] || {};
+            w[r].url = p;
+            w[r].init = function (width, height) {
+                if (typeof w[r].pop === 'function') {
+                    w[r].popup_mode ? w[r].pop(width, height) : w[r].embed();
+                } else {
+                    w.setTimeout(function () {
+                        w[r].init(width, height);
+                    }, 200);
+                }
+            };
+            var l = d.createElement(t);
+            l.src = p;
+            l.async = 1;
+            var s = document.getElementsByTagName(t)[0];
+            s.parentNode.insertBefore(l, s);
+        })(window, document, 'script', loader_url, '_yri');
+
+
+
+
+
+    }).catch(function (error) {
+        console.log('There was a problem with your fetch operation: ', error.message);
+    });
+</script>
+<script type="text/javascript">
+    window._yri = window._yri || {};
+
+    // Order settings
+    window._yri.order = {
+        applicant: {
+            email: 'j.smith@example.com',
+            first_name: 'john',
+            last_name: 'smith'
+        },
+        co_applicants: [],
+        institutions: [],
+        requestor: {
+            reference_no: demo_reference_no()
+        },
+        webhook: 'https://requestb.in/1e8fz3g1',
+        skip_notification: true,
+        product: 'MAV-O-EN'
+    };
+
+    // event handlers
+    window.addEventListener('done_yri', function (e) {
+        // Verification was completed by the consumer
+        // order_id is the Order's unique identifier on our API.
+        log(e.type, "finished asset verification");
+        log('Order ID', window._yri.order.order_id);
+    });
+
+    window.addEventListener('skip_yri', function (e) {
+        // Consumer skipped the verification or Error
+        // No order was generated.
+        var msg = window._yri.error
+            ? 'asset verification error'
+            : 'asset verification skipped';
+        log(e.type, msg);
+    });
+
+    window.addEventListener('submit', function (event) {
+        var form = event.target;
+        if (form.id !== 'consumer_session_form') return;
+
+        event.preventDefault();
+        var token = document.getElementById('consumer_session_token').value;
+        if (!token) return;
+
+        // Starts application.
+        window._yri.token = token;          // required!
+        //window._yri.popup_mode = true;   // optional, default: false
+        window._yri.init();
+
+        form.className = "d-none";
+        log('init', 'Embedded application initializer');
+    });
+
+    function demo_reference_no() {
+        return Math.floor((1 + Math.random()) * 0x100000).toString();
+    }
+
+    function log(event_type, message) {
+        var li = document.createElement("li");
+        li.innerHTML = event_type + ': ' + message;
+        document.getElementById('output').appendChild(li);
+    }
+</script>
+</body>
+</html>
