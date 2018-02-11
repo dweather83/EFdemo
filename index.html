@@ -15,6 +15,9 @@
             <label for="consumer_session_token">Consumer Session Token</label>
             <input type="text" class="form-control" id="consumer_session_token"
                    placeholder="Enter the JWT token obtained when creating or authenticating the consumer"/>
+		   <label for="product_code">Product Code</label>
+            <input type="text" class="form-control" id="product_code"
+                   placeholder="Enter the product code for the report you wish to order"/>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -39,11 +42,6 @@
         throw new Error('Network response was not ok.');
     }).then(function (text) {
         var loader_url = text.split("<pre>")[1].split("</pre>")[0];
-
-
-
-
-
         // Loader
         (function (w, d, t, p, r) {
             w[r] = w[r] || {};
@@ -63,11 +61,6 @@
             var s = document.getElementsByTagName(t)[0];
             s.parentNode.insertBefore(l, s);
         })(window, document, 'script', loader_url, '_yri');
-
-
-
-
-
     }).catch(function (error) {
         console.log('There was a problem with your fetch operation: ', error.message);
     });
@@ -77,7 +70,6 @@
 	
 	//Passes product code for order.  Demo Tool only
 	var productCode = document.getElementById('product_code').value.toString();
-
     // Order settings
     window._yri.order = {
         applicant: {
@@ -94,7 +86,6 @@
         skip_notification: true,
         product: productCode
     };
-
     // event handlers
     window.addEventListener('done_yri', function (e) {
         // Verification was completed by the consumer
@@ -102,7 +93,6 @@
         log(e.type, "finished asset verification");
         log('Order ID', window._yri.order.order_id);
     });
-
     window.addEventListener('skip_yri', function (e) {
         // Consumer skipped the verification or Error
         // No order was generated.
@@ -111,28 +101,22 @@
             : 'asset verification skipped';
         log(e.type, msg);
     });
-
     window.addEventListener('submit', function (event) {
         var form = event.target;
         if (form.id !== 'consumer_session_form') return;
-
         event.preventDefault();
         var token = document.getElementById('consumer_session_token').value;
         if (!token) return;
-
         // Starts application.
         window._yri.token = token;          // required!
         //window._yri.popup_mode = true;   // optional, default: false
         window._yri.init();
-
         form.className = "d-none";
         log('init', 'Embedded application initializer');
     });
-
     function demo_reference_no() {
         return Math.floor((1 + Math.random()) * 0x100000).toString();
     }
-
     function log(event_type, message) {
         var li = document.createElement("li");
         li.innerHTML = event_type + ': ' + message;
