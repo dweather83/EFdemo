@@ -16,11 +16,6 @@
             <input type="text" class="form-control" id="consumer_session_token"
                    placeholder="Enter the JWT token obtained when creating or authenticating the consumer"/>
         </div>
-		<div class="form-group">
-            <label for="product_code">Product Code</label>
-            <input type="text" class="form-control" id="product_code"
-                   placeholder="Enter the product code for the report you wish to order"/>
-        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     <div class="mb-5 p-3">
@@ -79,9 +74,6 @@
 </script>
 <script type="text/javascript">
     window._yri = window._yri || {};
-	
-	//Passes product code for order.  Demo Tool only
-	var productCode = document.getElementById('product_code').value.toString();
 
     // Order settings
     window._yri.order = {
@@ -97,7 +89,7 @@
         },
         webhook: 'https://requestb.in/1e8fz3g1',
         skip_notification: true,
-        product: productCode
+        product: 'MAS-O-EN'
     };
 
     // event handlers
