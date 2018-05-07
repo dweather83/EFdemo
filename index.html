@@ -109,6 +109,15 @@
             : 'asset verification skipped';
         log(e.type, msg);
     });
+    
+     window.addEventListener('info_yri', function (e) {
+        // Consumer skipped the verification or Error
+        // No order was generated.
+        var msg = window._yri.error
+            ? 'asset verification error'
+            : 'asset verification skipped';
+        console.log(e.detail);
+    });
 
     window.addEventListener('submit', function (event) {
         var form = event.target;
