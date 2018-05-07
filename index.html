@@ -98,6 +98,7 @@
         // order_id is the Order's unique identifier on our API.
         log(e.type, "finished asset verification");
         log('Order ID', window._yri.order.order_id);
+        console.log(e);
     });
 
     window.addEventListener('skip_yri', function (e) {
