@@ -31,7 +31,7 @@
     // // For non-DEMO applications =>
     // //  please use the loader script url and version provided by DevOps.
     // //
-    var sandbox_url = "https://sandbox-embeddedrails.riskinsight.yodlee.com/";
+    var sandbox_url = "https://sandbox-embeddedrails2.riskinsight.yodlee.com/";
     fetch(sandbox_url).then(function (response) {
         if (response.ok) {
             return response.text();
@@ -130,6 +130,7 @@
         // Starts application.
         window._yri.token = token;          // required!
         //window._yri.popup_mode = true;   // optional, default: false
+        window._yri.options = { statements: 3 }; 
         window._yri.init();
 
         form.className = "d-none";
